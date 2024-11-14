@@ -43,7 +43,8 @@ public class Login {
                 response.put("sessionData", sessionData);
                 response.put("status", "success");
                 response.put("message", "Login successful");
-                return ResponseEntity.accepted().body(response);
+                String sessionKey = (String) session.getAttribute("sessionKey");
+                return ResponseEntity.accepted().header("sessionKey", sessionKey).body(response);
             } else {
                 response.put("status", "error");
                 response.put("message", "Authorization failed");

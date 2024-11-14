@@ -38,7 +38,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         if (isAuthenticated) {
             // Set session attributes
-            String sessionKey = Helper.generateRandomString(8);
+            String sessionKey = Helper.generateRandomString(30);
             boolean sessionRes = authService.setSessionInRedis(sessionKey, phoneNo);
             session.setAttribute("phoneNo", phoneNo);
             session.setAttribute("authenticated", true);

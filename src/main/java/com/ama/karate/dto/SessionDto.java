@@ -81,17 +81,28 @@ public class SessionDto {
     public void setTotalStudents(Integer totalStudents) {
         this.totalStudents = totalStudents;
     }
+
     @Override
     public String toString() {
-        return "[userLid=" + userLid + ", phoneNo=" + phoneNo + ", userRole=" + userRole + ", title=" + title
-                + ", profileUrl=" + profileUrl + ", userBelt=" + userBelt + ", email=" + email + ", fullName="
-                + fullName + ", address=" + address + ", totalClasses=" + totalClasses + ", totalStudents="
-                + totalStudents + "]";
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        sb.append("\"userLid\":").append(userLid);
+        sb.append(", \"phoneNo\":\"").append(phoneNo).append("\"");
+        sb.append(", \"userRole\":\"").append(userRole).append("\"");
+        sb.append(", \"title\":").append(title == null ? "null" : "\"" + title + "\"");
+        sb.append(", \"profileUrl\":\"").append(profileUrl).append("\"");
+        sb.append(", \"userBelt\":\"").append(userBelt).append("\"");
+        sb.append(", \"email\":\"").append(email).append("\"");
+        sb.append(", \"fullName\":\"").append(fullName).append("\"");
+        sb.append(", \"address\":\"").append(address).append("\"");
+        sb.append(", \"totalClasses\":").append(totalClasses);
+        sb.append(", \"totalStudents\":").append(totalStudents);
+        sb.append("}");
+        return sb.toString();
     }
 
-
-
-
     
+
+
 
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,10 +25,9 @@ public class Students {
     @Autowired UserInterfaceService iis;
     
     @PostMapping("/studnet-details")
-    public ResponseEntity<String> studentDetails(@RequestParam int studentId, HttpSession session) {
+    public ResponseEntity<String> studentDetails(@RequestParam int studentId, @RequestAttribute String phoneNo) {
 
         try {
-            String phoneNo = (String) session.getAttribute("phoneNo");
             List<StudentDto> response = iis.bringStudentDetails(phoneNo, studentId);
 
             return new ResponseEntity<>(response.toString(), HttpStatus.OK);
@@ -37,10 +37,9 @@ public class Students {
     }
 
     @PostMapping("/add-studnet")
-    public ResponseEntity<String> addStudent(@RequestBody String jsonObj, HttpSession session) {
+    public ResponseEntity<String> addStudent(@RequestBody String jsonObj, @RequestAttribute String phoneNo) {
 
         try {
-            String phoneNo = (String) session.getAttribute("phoneNo");
 
             ResponseDto response = iis.sendStudentAdmissions(jsonObj, phoneNo);
             return ResponseEntity.status(response.getStatusCode()).body(response.getMessage());

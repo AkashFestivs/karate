@@ -1,5 +1,6 @@
 package com.ama.karate.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,14 +12,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static com.ama.karate.utils.JsonKeyService.getJsonKey;
+import com.ama.karate.utils.RedisService;
+
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final CustomAuthenticationProvider customAuthProvider;
+
+    @Autowired RedisService rs;
 
     public SecurityConfig(CustomAuthenticationProvider customAuthProvider) {
         this.customAuthProvider = customAuthProvider;
@@ -31,25 +36,28 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authenticationProvider(customAuthProvider)
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/authenticate","/forgot-password","/change-password").permitAll()
-                .anyRequest().access((authentication, context) -> {
-                    HttpServletRequest request = context.getRequest();
-                    HttpSession session = request.getSession(false);
-                    boolean hasAccess = session != null && session.getAttribute("authenticated") != null
-                            && (Boolean) session.getAttribute("authenticated");
-                    return new AuthorizationDecision(hasAccess);
-                })
+                .requestMatchers("/authenticate", "/forgot-password", "/change-password").permitAll()
+                .anyRequest().access((authentication, context) -> checkSessionAndHeader(context.getRequest()))
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
             )
             .httpBasic(withDefaults());
-
+    
         return http.build();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    private AuthorizationDecision checkSessionAndHeader(HttpServletRequest request) {
+        String sessionKeyHeader = request.getHeader("sessionKey");
+        boolean isKeyInRedis = sessionKeyHeader != null && rs.getSession(sessionKeyHeader) != null;
+        String SessionData = rs.getSession(sessionKeyHeader);
+        String phoneNo = getJsonKey(SessionData, "phoneNo");
+        request.setAttribute("phoneNo", phoneNo);
+        return new AuthorizationDecision(isKeyInRedis);
     }
 }
