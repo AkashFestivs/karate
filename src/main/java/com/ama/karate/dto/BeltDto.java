@@ -40,8 +40,13 @@ public class BeltDto {
     }
     @Override
     public String toString() {
-        return "beltDto [colour=" + colour + ", fees=" + fees + ", level=" + level + ", portion=" + portion
-                + ", description=" + description + "]";
+        return "{" +
+                "\"colour\":\"" + colour + "\"," +
+                "\"fees\":" + fees + "," +
+                "\"level\":\"" + level + "\"," +
+                "\"portion\":\"" + portion + "\"," +
+                "\"description\":\"" + description + "\"" +
+                "}";
     }
 
     

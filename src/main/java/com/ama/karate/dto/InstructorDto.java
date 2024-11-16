@@ -34,8 +34,12 @@ public class InstructorDto {
     
     @Override
     public String toString() {
-        return "InstructorDto [instructorName=" + instructorName + ", instructorBelt=" + instructorBelt
-                + ", instructorProfileUrl=" + instructorProfileUrl + ", instructorlid=" + instructorlid + "]";
+        return "{" +
+                "\"instructorName\":\"" + instructorName + "\"," +
+                "\"instructorBelt\":\"" + instructorBelt + "\"," +
+                "\"instructorProfileUrl\":\"" + instructorProfileUrl + "\"," +
+                "\"instructorlid\":" + instructorlid +
+                "}";
     }
 
     
