@@ -53,11 +53,15 @@ public class SecurityConfig {
     }
 
     private AuthorizationDecision checkSessionAndHeader(HttpServletRequest request) {
-        String sessionKeyHeader = request.getHeader("sessionKey");
-        boolean isKeyInRedis = sessionKeyHeader != null && rs.getSession(sessionKeyHeader) != null;
-        String SessionData = rs.getSession(sessionKeyHeader);
-        String phoneNo = getJsonKey(SessionData, "phoneNo");
-        request.setAttribute("phoneNo", phoneNo);
-        return new AuthorizationDecision(isKeyInRedis);
+        try{
+            String sessionKeyHeader = request.getHeader("sessionKey");
+            boolean isKeyInRedis = sessionKeyHeader != null && rs.getSession(sessionKeyHeader) != null;
+            String SessionData = rs.getSession(sessionKeyHeader);
+            String phoneNo = getJsonKey(SessionData, "phoneNo");
+            request.setAttribute("phoneNo", phoneNo);
+            return new AuthorizationDecision(isKeyInRedis);
+        }catch(Exception e){
+            return new AuthorizationDecision(false);
+        }
     }
 }
