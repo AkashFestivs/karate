@@ -38,6 +38,4 @@ public class UserService implements UserInterfaceService{
     public ResponseDto sendStudentAdmissions(String StudentObj, String phoneNo) {
         return isd.sendStudentAdmissions(StudentObj, phoneNo);
     }
-
-    
 }

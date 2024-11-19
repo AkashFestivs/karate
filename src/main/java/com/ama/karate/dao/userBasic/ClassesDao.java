@@ -10,8 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.ama.karate.dto.ClassesDto;
-import com.ama.karate.dto.StudentDto;
 import com.ama.karate.dto.ResponseDto;
+import com.ama.karate.dto.StudentDto;
 
 @Service
 public class ClassesDao{
@@ -29,7 +29,7 @@ public class ClassesDao{
                             "     cm.name AS classesName," + 
                             "     ARRAY_AGG(DISTINCT instructor.full_name) AS instructorName," + 
                             "     cm.address AS classesAddress," + 
-                            "     ARRAY_AGG(DISTINCT cm.timing) AS classesTiming, " + 
+                            "     cm.timing AS classesTiming, " + 
                             "     COUNT(DISTINCT student.id) AS totalStudents," + 
                             "     cm.id AS classesLid" + 
                             " FROM " + 
@@ -81,22 +81,6 @@ public class ClassesDao{
         } catch (DataAccessException e) {
             e.printStackTrace();
             return new ArrayList<>();
-        }
-    }
-
-    public ResponseDto sendClassMaster(String classObj, String phoneNo) {
-        try {
-            String sql = "SELECT upsert_class_master(?, ?)";
-    
-            String responseObj = jt.queryForObject(sql, String.class,classObj, phoneNo);
-    
-            response.setStatusCode(201);
-            response.setMessage(responseObj);
-            return response;
-        } catch (DataAccessException e) {
-            response.setStatusCode(500);
-            response.setMessage(e.getMessage());
-            return response;
         }
     }
 }

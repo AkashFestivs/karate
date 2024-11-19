@@ -26,7 +26,7 @@ public class MasterDao implements MasterInterfaceService{
 
     @Autowired ObjectMapper om;
 
-    ResponseDto responseDto = new ResponseDto();
+    ResponseDto response = new ResponseDto();
 
     //Get List of classes
     @Override
@@ -65,39 +65,6 @@ public class MasterDao implements MasterInterfaceService{
         }
     }
 
-    @Override
-    public ResponseDto insertClasses(String jsonObj) {
-
-        try {
-            Map<String, Object> classMap = om.readValue(jsonObj, Map.class);
-
-            // Prepare SQL and parameters
-            String sql = "INSERT INTO class_master (name, address, city, is_main, start_date, timing, fees, admission_fees) " +
-                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?,)";
-            
-            Object[] params = new Object[]{
-                classMap.get("name"),
-                classMap.get("address"),
-                classMap.get("city"),
-                classMap.get("isMain"),
-                classMap.get("startDate"),
-                classMap.get("timing"),
-                classMap.get("fees"),
-                classMap.get("admissionFees")
-            };
-
-            jt.update(sql, params);
-            responseDto.setStatusCode(200);
-            responseDto.setMessage("Insert succeefully");
-            return responseDto;
-        } catch (DataAccessException | JsonProcessingException e) {
-            responseDto.setStatusCode(500);
-            responseDto.setMessage(e.getMessage());
-            e.printStackTrace();
-            return responseDto;
-        }
-    }
-
     public ResponseDto insertBelt(String jsonObj) {
         try {
             Map<String, Object> beltMap = om.readValue(jsonObj, Map.class);
@@ -115,14 +82,30 @@ public class MasterDao implements MasterInterfaceService{
             };
 
             jt.update(sql, params);
-            responseDto.setStatusCode(200);
-            responseDto.setMessage("Insert succeefully");
-            return responseDto;
+            response.setStatusCode(200);
+            response.setMessage("Insert succeefully");
+            return response;
         } catch (DataAccessException | JsonProcessingException e) {
-            responseDto.setStatusCode(500);
-            responseDto.setMessage(e.getMessage());
+            response.setStatusCode(500);
+            response.setMessage(e.getMessage());
             e.printStackTrace();
-            return responseDto;
+            return response;
+        }
+    }
+
+    public ResponseDto sendClassMaster(String classObj, String phoneNo) {
+        try {
+            String sql = "SELECT upsert_class_master(?, ?)";
+    
+            String responseObj = jt.queryForObject(sql, String.class,classObj, phoneNo);
+    
+            response.setStatusCode(201);
+            response.setMessage(responseObj);
+            return response;
+        } catch (DataAccessException e) {
+            response.setStatusCode(500);
+            response.setMessage(e.getMessage());
+            return response;
         }
     }
 }

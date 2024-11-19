@@ -18,7 +18,7 @@ public interface  MasterInterfaceService {
 
     List<StudentDto> bringAllStudents();
 
-    ResponseDto insertClasses(String JsonObj);
+    ResponseDto sendClassMaster(String JsonObj, String phoneNo);
 
     ResponseDto insertBelt(String jsonObj);
 
