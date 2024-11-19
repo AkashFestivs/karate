@@ -43,4 +43,33 @@ public class StudentsDao{
             return response;
         }
     }
+
+    public ResponseDto upsertUserClasses(String classLid, String phoneNo, String beltLid) {
+        try {
+            String sql = "INSERT INTO user_class (user_lid, class_lid, belt_lid, created_by, updated_by)" +
+                                " VALUES (" +
+                                " (SELECT id FROM public.user WHERE phone_no = ?), " +
+                                " ?, " +
+                                " (SELECT belt_lid FROM user_belt_record WHERE user_lid = (SELECT id FROM public.user WHERE phone_no = ?) ORDER BY exam_date DESC LIMIT 1), " +
+                                " ?, " +
+                                " ?" +
+                                " )" +
+                                " ON CONFLICT (user_lid, class_lid, belt_lid)" +
+                                " DO UPDATE SET " +
+                                " updated_by = EXCLUDED.updated_by," +
+                                " updated_at = CURRENT_TIMESTAMP;";
+    
+            int responseObj = jt.update(sql, phoneNo, classLid, phoneNo, phoneNo, phoneNo);
+    
+            response.setStatusCode(200);
+            response.setMessage("success");
+            return response;
+        } catch (DataAccessException e) {
+            response.setStatusCode(500);
+            response.setMessage(e.getMessage());
+            return response;
+        }
+    }
+    
+
 }

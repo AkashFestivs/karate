@@ -110,7 +110,7 @@ BEGIN
         city VARCHAR(255),
         is_main BOOLEAN,
         start_date DATE,
-        timing TEXT[],
+        timing TEXT,
         fees VARCHAR(100),
         admission_fees VARCHAR(100),
         instructor_lid INTEGER[]
@@ -124,7 +124,7 @@ BEGIN
         input_json->>'clas_city',
         (input_json->>'is_main')::BOOLEAN,
         (input_json->>'start_date')::DATE,
-        ARRAY(SELECT jsonb_array_elements_text(input_json->'timing')),
+        input_json->'timing',
         input_json->>'fees',
         input_json->>'admission_fees',
         ARRAY(SELECT jsonb_array_elements_text(input_json->'instructor_lid')::INTEGER)

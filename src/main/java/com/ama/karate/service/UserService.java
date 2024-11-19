@@ -38,4 +38,9 @@ public class UserService implements UserInterfaceService{
     public ResponseDto sendStudentAdmissions(String StudentObj, String phoneNo) {
         return isd.sendStudentAdmissions(StudentObj, phoneNo);
     }
+
+    @Override
+    public ResponseDto upsertUserClasses(String classLid, String phoneNo, String beltLid) {
+        return isd.upsertUserClasses(classLid, phoneNo, beltLid);
+    }
 }

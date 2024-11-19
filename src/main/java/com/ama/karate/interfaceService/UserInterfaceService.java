@@ -17,6 +17,8 @@ public interface UserInterfaceService {
 
     List<StudentDto> bringStudentDetails(String phoneNo, int studentId);
 
-    ResponseDto sendStudentAdmissions(String StudentObj, String phoneNo); 
+    ResponseDto sendStudentAdmissions(String StudentObj, String phoneNo);
+
+    ResponseDto upsertUserClasses(String classLid, String phoneNo, String beltLid);
     
 }
