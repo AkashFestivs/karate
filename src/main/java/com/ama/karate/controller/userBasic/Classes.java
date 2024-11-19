@@ -7,13 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ama.karate.dto.ClassesDto;
 import com.ama.karate.dto.StudentDto;
 import com.ama.karate.interfaceService.UserInterfaceService;
-
+import com.ama.karate.dto.ResponseDto;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
@@ -43,6 +44,17 @@ public class Classes {
         } catch (Exception e) {
             return new ResponseEntity<>("Exception", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
+    @PostMapping("/class-master")
+    public ResponseEntity<String> classMaster(@RequestBody String classObj, @RequestAttribute String phoneNo) {
+
+        try {
+            ResponseDto response = iis.sendClassMaster(classObj, phoneNo);
+
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Exception", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

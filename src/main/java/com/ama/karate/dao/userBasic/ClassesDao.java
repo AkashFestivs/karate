@@ -11,12 +11,15 @@ import org.springframework.stereotype.Service;
 
 import com.ama.karate.dto.ClassesDto;
 import com.ama.karate.dto.StudentDto;
+import com.ama.karate.dto.ResponseDto;
 
 @Service
 public class ClassesDao{
 
     @Autowired
     JdbcTemplate jt;
+
+    ResponseDto response = new ResponseDto();
 
     //  Get List of classes for particular instructors
     public List<ClassesDto> bringUserClasses(String phoneNo) {
@@ -78,6 +81,22 @@ public class ClassesDao{
         } catch (DataAccessException e) {
             e.printStackTrace();
             return new ArrayList<>();
+        }
+    }
+
+    public ResponseDto sendClassMaster(String classObj, String phoneNo) {
+        try {
+            String sql = "SELECT upsert_class_master(?, ?)";
+    
+            String responseObj = jt.queryForObject(sql, String.class,classObj, phoneNo);
+    
+            response.setStatusCode(201);
+            response.setMessage(responseObj);
+            return response;
+        } catch (DataAccessException e) {
+            response.setStatusCode(500);
+            response.setMessage(e.getMessage());
+            return response;
         }
     }
 }

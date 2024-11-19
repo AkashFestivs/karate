@@ -44,17 +44,17 @@ public class Login {
                 response.put("status", "success");
                 response.put("message", "Login successful");
                 String sessionKey = (String) session.getAttribute("sessionKey");
-                return ResponseEntity.accepted().header("sessionKey", sessionKey).body(response);
+                return ResponseEntity.ok().header("sessionKey", sessionKey).body(response);
             } else {
                 response.put("status", "error");
                 response.put("message", "Authorization failed");
-                return ResponseEntity.status(401).body(response);
+                return ResponseEntity.status(400).body(response);
             }
-        } catch (AuthenticationException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             response.put("status", "error");
             response.put("message", "Internal Server Error");
-            return ResponseEntity.status(401).body(response);
+            return ResponseEntity.status(500).body(response);
         }
     }
 

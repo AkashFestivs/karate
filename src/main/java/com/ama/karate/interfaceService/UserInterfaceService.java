@@ -18,5 +18,7 @@ public interface UserInterfaceService {
     List<StudentDto> bringStudentDetails(String phoneNo, int studentId);
 
     ResponseDto sendStudentAdmissions(String StudentObj, String phoneNo); 
+
+    ResponseDto sendClassMaster(String classObj, String phoneNo); 
     
 }

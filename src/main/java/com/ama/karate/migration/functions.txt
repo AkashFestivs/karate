@@ -85,3 +85,110 @@ $BODY$;
 
 
 ------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS public.upsert_class_master;
+
+CREATE OR REPLACE FUNCTION public.upsert_class_master(
+    input_json jsonb,
+    created_user_lid integer
+)
+RETURNS jsonb
+LANGUAGE 'plpgsql'
+COST 100
+VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE
+    class_id INT;
+    class_exists BOOLEAN;
+    unnset_instructor_lid INT;
+BEGIN
+    DROP TABLE IF EXISTS temp_class;
+    CREATE TEMPORARY TABLE temp_class (
+        name VARCHAR(50),
+        address VARCHAR(255),
+        city VARCHAR(255),
+        is_main BOOLEAN,
+        start_date DATE,
+        timing TEXT[],
+        fees VARCHAR(100),
+        admission_fees VARCHAR(100),
+        instructor_lid INTEGER[]
+    );
+
+    -- Insert the values from the JSON input into the temp table
+    INSERT INTO temp_class (name, address, city, is_main, start_date, timing, fees, admission_fees, instructor_lid)
+    VALUES (
+        input_json->>'class_name',
+        input_json->>'classes_address',
+        input_json->>'clas_city',
+        (input_json->>'is_main')::BOOLEAN,
+        (input_json->>'start_date')::DATE,
+        ARRAY(SELECT jsonb_array_elements_text(input_json->'timing')),
+        input_json->>'fees',
+        input_json->>'admission_fees',
+        ARRAY(SELECT jsonb_array_elements_text(input_json->'instructor_lid')::INTEGER)
+    );
+
+    -- Check if the class already exists based on name
+    SELECT EXISTS (SELECT 1 FROM public.class_master WHERE name = (SELECT name FROM temp_class)) INTO class_exists;
+    
+    IF class_exists THEN
+        RETURN jsonb_build_object('status', 409, 'message', 'Class already exists!');
+    END IF;
+
+    -- Insert new class or update existing class (if conflict occurs) and retrieve the class ID
+    INSERT INTO public.class_master (name, address, city, is_main, start_date, timing, fees, admission_fees, created_by, updated_by)
+    SELECT name, address, city, is_main, start_date, timing, fees, admission_fees, created_user_lid, created_user_lid
+    FROM temp_class
+    ON CONFLICT (name) DO UPDATE
+    SET 
+        city = EXCLUDED.city,
+        is_main = EXCLUDED.is_main,
+        start_date = EXCLUDED.start_date,
+        timing = EXCLUDED.timing,
+        fees = EXCLUDED.fees,
+        admission_fees = EXCLUDED.admission_fees,
+        updated_by = EXCLUDED.updated_by
+    RETURNING id INTO class_id;
+
+    -- Update role for instructors
+    UPDATE public.user
+    SET role_id = (SELECT id FROM roles WHERE abbr = 'INS')
+    WHERE id = ANY (SELECT unnest(instructor_lid) FROM temp_class);
+
+    -- Insert or update user-class relationships
+    FOR unnset_instructor_lid IN (SELECT unnest(instructor_lid) FROM temp_class) LOOP 
+        INSERT INTO user_class (user_lid, class_lid, belt_lid, created_by, updated_by)
+        VALUES (
+            unnset_instructor_lid, 
+            class_id, 
+            (SELECT belt_lid FROM user_belt_record WHERE user_lid = unnset_instructor_lid ORDER BY exam_date DESC LIMIT 1), 
+            created_user_lid, 
+            created_user_lid
+        )
+        ON CONFLICT (user_lid, class_lid, belt_lid)
+        DO UPDATE SET 
+            updated_by = EXCLUDED.updated_by,
+            updated_at = CURRENT_TIMESTAMP;
+    END LOOP;
+
+    -- Return success response
+    RETURN jsonb_build_object('status', 200, 'message', 'Class registered successfully!');
+END;
+$BODY$;
+
+SELECT * FROM upsert_class_master('{
+  "class_name": "Advanced Karate Tech",
+  "classes_address": "123 Main Street",
+  "clas_city": "New York",
+  "is_main": true,
+  "start_date": "2024-01-01",
+  "timing": ["09:00-11:00", "14:00-16:00"],
+  "fees": "500",
+  "admission_fees": "50",
+  "instructor_lid": ["10", "9", "8"]
+}
+',3);
+
+------------------------------------------------------------------------------------------------
