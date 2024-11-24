@@ -14,7 +14,7 @@ public class loginDao {
 
     @Autowired JdbcTemplate jt;
 
-    //   To fetch the password by phone number
+    //  To fetch the password by phone number
     public AuthDto userPassword(String phoneNo) {
         System.out.println("user phone in dao : 0"+phoneNo);
         try {
@@ -29,52 +29,91 @@ public class loginDao {
 
     public SessionDto sessionData(String phoneNo){
         try {
-            String SQL = "SELECT DISTINCT " + 
-                                "     pu.id AS userLid, " + 
-                                "     pu.phone_no AS phoneNo, " + 
-                                "     rr.name AS userRole, " + 
-                                "     ut.title, " + 
-                                "     pu.profile_url AS profileUrl," + 
-                                "     bm.colour AS userBelt," + 
-                                "     pu.email," + 
-                                "     pu.full_name AS fullName," + 
+            String roleNameSQL = "SELECT rr.abbr FROM public.user pu INNER JOIN roles rr ON rr.id = pu.role_id WHERE pu.phone_no = ? ";
+            String roleName = jt.queryForObject(roleNameSQL, String.class, phoneNo);
+
+            System.out.println("roleName: " + roleName);
+            if(roleName != null && roleName.equalsIgnoreCase("ADM")){
+
+                String SQL = "SELECT DISTINCT   " + 
+                                "     pu.id AS userLid,   " + 
+                                "     pu.phone_no AS phoneNo,   " + 
+                                "     rr.name AS userRole,   " + 
+                                "     ut.title,   " + 
+                                "     pu.profile_url AS profileUrl,  " + 
+                                "     'ADMIN BELT' AS userBelt,  " + 
+                                "     pu.email,  " + 
+                                "     pu.full_name AS fullName,  " + 
                                 "     pu.address," + 
-                                "     instructor_stats.total_classes, " + 
-                                "     instructor_stats.total_students " + 
-                                " FROM " + 
-                                "     public.user pu " + 
-                                " INNER JOIN " + 
-                                "     roles rr ON rr.id = pu.role_id " + 
-                                " INNER JOIN " + 
-                                "     user_class uc ON uc.user_lid = pu.id " + 
-                                " INNER JOIN " + 
-                                "     class_master cm ON cm.id = uc.class_lid " + 
-                                " INNER JOIN " + 
-                                "     belt_master bm ON bm.id = uc.belt_lid " + 
-                                " LEFT JOIN " + 
-                                "     user_title ut ON ut.user_lid = pu.id " + 
-                                " LEFT JOIN (" + 
-                                "     SELECT " + 
-                                "         instructor.id AS instructor_id, " + 
-                                "         COUNT(DISTINCT uc.class_lid) AS total_classes, " + 
-                                "         COUNT(DISTINCT student.id) AS total_students " + 
-                                "     FROM " + 
-                                "         user_class uc " + 
-                                "     JOIN " + 
-                                "         public.user instructor ON uc.user_lid = instructor.id " + 
-                                "     JOIN " + 
-                                "         user_class student_classes ON student_classes.class_lid = uc.class_lid " + 
-                                "     JOIN " + 
-                                "         public.user student ON student_classes.user_lid = student.id " + 
-                                "     WHERE " + 
-                                "         instructor.role_id = (SELECT id FROM roles WHERE name = 'Instructor') " + 
-                                "         AND student.role_id = (SELECT id FROM roles WHERE name = 'Student') " + 
-                                "     GROUP BY " + 
-                                "         instructor.id" + 
-                                " ) AS instructor_stats ON pu.id = instructor_stats.instructor_id" + 
-                                " WHERE " + 
-                                "     pu.phone_no = ?;";
-            return jt.queryForObject(SQL, new BeanPropertyRowMapper<>(SessionDto.class), phoneNo);
+                                "     (SELECT COUNT(cm.*) FROM class_master cm ) AS total_classes," + 
+                                "     (SELECT COUNT(pu_inner.id) " + 
+                                "      FROM public.user pu_inner" + 
+                                "      INNER JOIN roles rr_inner ON rr_inner.id = pu_inner.role_id" + 
+                                "      WHERE pu_inner.active = TRUE AND rr_inner.abbr = 'STD') AS totalStudents" + 
+                                " FROM   " + 
+                                "     public.user pu   " + 
+                                " INNER JOIN   " + 
+                                "     roles rr ON rr.id = pu.role_id   " + 
+                                " LEFT JOIN   " + 
+                                "     user_title ut ON ut.user_lid = pu.id" + 
+                                " WHERE pu.phone_no = ? ;";
+                return jt.queryForObject(SQL, new BeanPropertyRowMapper<>(SessionDto.class), phoneNo);
+
+            }else{
+                String SQL = "WITH user_details AS (" + 
+                            "     SELECT DISTINCT" + 
+                            "         pu.id AS userLid," + 
+                            "         pu.phone_no AS phoneNo," + 
+                            "         rr.name AS userRole," + 
+                            "         ut.title AS title," + 
+                            "         pu.profile_url AS profileUrl," + 
+                            "         bm.colour AS userBelt," + 
+                            "         pu.email," + 
+                            "         pu.full_name AS fullName," + 
+                            "         pu.address" + 
+                            "     FROM" + 
+                            "         public.user pu" + 
+                            "     INNER JOIN" + 
+                            "         roles rr ON rr.id = pu.role_id" + 
+                            "     INNER JOIN" + 
+                            "         user_class uc ON uc.user_lid = pu.id" + 
+                            "     INNER JOIN" + 
+                            "         class_master cm ON cm.id = uc.class_lid" + 
+                            "     INNER JOIN" + 
+                            "         belt_master bm ON bm.id = uc.belt_lid" + 
+                            "     LEFT JOIN" + 
+                            "         user_title ut ON ut.user_lid = pu.id" + 
+                            "     WHERE" + 
+                            "         pu.phone_no = ? " + 
+                            " )," + 
+                            " aggregated_data AS (" + 
+                            "     SELECT" + 
+                            "         COUNT(DISTINCT uc.class_lid) AS total_classes," + 
+                            "         COUNT(CASE WHEN rr.abbr = 'STD' THEN pu.id END) AS totalStudents" + 
+                            "     FROM" + 
+                            "         user_class uc" + 
+                            "     INNER JOIN" + 
+                            "         public.user pu ON pu.id = uc.user_lid" + 
+                            "     INNER JOIN" + 
+                            "         roles rr ON rr.id = pu.role_id" + 
+                            "     WHERE" + 
+                            "         uc.class_lid IN (" + 
+                            "             SELECT uc.class_lid" + 
+                            "             FROM user_class uc" + 
+                            "             INNER JOIN public.user pu ON uc.user_lid = pu.id" + 
+                            "             WHERE pu.phone_no = ? " + 
+                            "         )" + 
+                            " )" + 
+                            " SELECT" + 
+                            "     ud.*," + 
+                            "     ad.total_classes," + 
+                            "     ad.totalStudents " + 
+                            " FROM" + 
+                            "     user_details ud," + 
+                            "     aggregated_data ad;";
+                return jt.queryForObject(SQL, new BeanPropertyRowMapper<>(SessionDto.class), phoneNo, phoneNo);
+            }
+
         } catch (DataAccessException e) {
             e.printStackTrace();
             return new SessionDto();

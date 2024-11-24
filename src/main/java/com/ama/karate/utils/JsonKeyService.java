@@ -14,7 +14,7 @@ public class JsonKeyService {
 
     public static String getJsonKey(String jsonString, String key) {
         JsonObject jsonObj = JsonParser.parseString(jsonString).getAsJsonObject();
-        return jsonObj.get("phoneNo").getAsString();
+        return jsonObj.get(key).getAsString();
     }
 
     public static List<Map<String, String>> getJsonKeys(String jsonString, String key1, String key2) {

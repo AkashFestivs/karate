@@ -4,19 +4,19 @@ INSERT INTO roles (name, abbr, created_by) VALUES
 ('Admin', 'ADM', 'system'),
 ('Instructor', 'INS', 'system');
 
--- Insert data into public.user table
--- Assume user with ID 1 is an Admin, user with ID 2 is an Instructor, and users 3-10 are Students.
-INSERT INTO public.user (phone_no, password, email, full_name, parent_name, alternate_number, address, profile_url, role_id, created_by, updated_by) VALUES
-('1234567890', '$2a$10$kZ.rgnyhaNSCf0gaK6CE.egqfiyEZoY5cVe0fV/cvzlj5fCODaXYa', 'admin@karate.com', 'Admin User', 'System Admin', '0987654321', '123 Main St', '/images/admin.jpg', 2, 'system', 'system'),  -- Admin
-('2345678901', '$2a$10$kZ.rgnyhaNSCf0gaK6CE.egqfiyEZoY5cVe0fV/cvzlj5fCODaXYa', 'instructor@karate.com', 'Instructor User', 'Sensei Doe', '0987654322', '124 Main St', '/images/instructor.jpg', 3, 'system', 'system'),  -- Instructor
-('3456789012', '$2a$10$kZ.rgnyhaNSCf0gaK6CE.egqfiyEZoY5cVe0fV/cvzlj5fCODaXYa', 'student1@karate.com', 'Student One', 'Parent One', '0987654323', '125 Main St', '/images/student1.jpg', 1, 'system', 'system'),
-('4567890123', '$2a$10$kZ.rgnyhaNSCf0gaK6CE.egqfiyEZoY5cVe0fV/cvzlj5fCODaXYa', 'student2@karate.com', 'Student Two', 'Parent Two', '0987654324', '126 Main St', '/images/student2.jpg', 1, 'system', 'system'),
-('5678901234', '$2a$10$kZ.rgnyhaNSCf0gaK6CE.egqfiyEZoY5cVe0fV/cvzlj5fCODaXYa', 'student3@karate.com', 'Student Three', 'Parent Three', '0987654325', '127 Main St', '/images/student3.jpg', 1, 'system', 'system'),
-('6789012345', '$2a$10$kZ.rgnyhaNSCf0gaK6CE.egqfiyEZoY5cVe0fV/cvzlj5fCODaXYa', 'student4@karate.com', 'Student Four', 'Parent Four', '0987654326', '128 Main St', '/images/student4.jpg', 1, 'system', 'system'),
-('7890123456', '$2a$10$kZ.rgnyhaNSCf0gaK6CE.egqfiyEZoY5cVe0fV/cvzlj5fCODaXYa', 'student5@karate.com', 'Student Five', 'Parent Five', '0987654327', '129 Main St', '/images/student5.jpg', 1, 'system', 'system'),
-('8901234567', '$2a$10$kZ.rgnyhaNSCf0gaK6CE.egqfiyEZoY5cVe0fV/cvzlj5fCODaXYa', 'student6@karate.com', 'Student Six', 'Parent Six', '0987654328', '130 Main St', '/images/student6.jpg', 1, 'system', 'system'),
-('9012345678', '$2a$10$kZ.rgnyhaNSCf0gaK6CE.egqfiyEZoY5cVe0fV/cvzlj5fCODaXYa', 'student7@karate.com', 'Student Seven', 'Parent Seven', '0987654329', '131 Main St', '/images/student7.jpg', 1, 'system', 'system'),
-('0123456789', '$2a$10$kZ.rgnyhaNSCf0gaK6CE.egqfiyEZoY5cVe0fV/cvzlj5fCODaXYa', 'student8@karate.com', 'Student Eight', 'Parent Eight', '0987654330', '132 Main St', '/images/student8.jpg', 1, 'system', 'system');
+-- Inserting Instructors into the 'user' table
+INSERT INTO public.user (
+    phone_no, email, full_name, parent_name, alternate_number, address, profile_url, created_by, updated_by
+) VALUES
+('7045396413', 'rushikamble155@gmail.com', 'Rishikesh Dhanraj Kamble', 'Dhanraj Kamble', '9702686045', 'Guru Ashish B-203 Plot no 35 sector 1E kalamboli', '', 'system', 'system'),
+('8652578436', 'prasadsalunkhe214@gmail.com', 'Prasad Bhimaji Salunkhe', 'Bhimaji Khashaba Salunkhe', '9136116787', 'Golden view apt, sec 6A, C - 204,Plot no - 47 Kamothe', '', 'system', 'system'),
+('9321798545', 'vaibhavkharade456v@gmail.com', 'Vaibhav. Anant Kharade', 'Anant Prakash Kharade', '9321798545', 'Alankapuri B- wing sec- 10 plot no- 12 kamothe', '', 'system', 'system'),
+('9594205474', 'muktaigaikwad8@gmail.com', 'Muktai Sanjay Gaikwad', 'Sanjay Baburao Gaikwad', '7517670448', 'L.I.G 2 sector -01 room no A-55 kalamboli', '', 'system', 'system'),
+('7021457277', 'roshnijogdand123@gmail.com', 'Roshni Piraji Jogdand', 'Anita Jogdand', '7021488567', 'Nandanvan Park, Sec 36, Plot no: 9, D/304, Kamothe - 410209.', '', 'system', 'system'),
+('9320912083', 'amarmisal11@gmail.com', 'Amar Bramhadeo Misal', 'Bramhadeo Misal', '7738209693', 'C-403, Kalash Residency, Plot No. 10, Sector-4, Karanjade, Panvel-410206', '', 'system', 'system'),
+('9222085041', 'tusharborate1377@gmail.com', 'Tushar Ramesh Borate', 'Ramesh Borate', '8779020835', 'room no- 02, B-ving East End appartment plot no-26, sector -6A, kamothe', '', 'system', 'system'),
+('7208675262', 'yuvrajnarale06@gmail.com', 'YUVRAJ ANANDA NARALE', 'Ananda Narale', '9172836295', 'Suraj park building sector 9 plot 28 kamothe', '', 'system', 'system'),
+('9372036791', 'vishalzende4@gmail.com', 'Vishal Zende', 'Devanand Zende', '9152090248', 'mansarovar complex sec. 34 kamothe', '', 'system', 'system');
 
 -- Insert data into class_master table
 INSERT INTO class_master (name, address, city, is_main, start_date, timing, fees, admission_fees, created_by, updated_by) VALUES
@@ -25,12 +25,20 @@ INSERT INTO class_master (name, address, city, is_main, start_date, timing, fees
 
 -- Insert data into belt_master table
 INSERT INTO belt_master (colour, fees, level, portion, description, created_by, updated_by) VALUES
-('White', '1000', 1, 'Basics', 'Beginner belt', 'system', 'system'),
-('Yellow', '1200', 2, 'Basics + Intermediate', 'Novice belt', 'system', 'system'),
-('Green', '1500', 3, 'Intermediate', 'Intermediate belt', 'system', 'system'),
-('Blue', '1800', 4, 'Intermediate + Advanced', 'Advanced intermediate belt', 'system', 'system'),
-('Brown', '2000', 5, 'Advanced', 'Advanced belt', 'system', 'system'),
-('Black', '2500', 6, 'Mastery', 'Expert belt', 'system', 'system');
+('white', '0', 1, 'Basics', 'Beginner belt', 'system', 'system'),
+('yellow', '800', 2, 'Basics + Intermediate', 'Novice belt', 'system', 'system'),
+('orange', '1000', 3, 'Basics + Intermediate', 'Novice belt', 'system', 'system'),
+('green', '1300', 4, 'Intermediate', 'Intermediate belt', 'system', 'system'),
+('blue', '1600', 5, 'Intermediate + Advanced', 'Advanced intermediate belt', 'system', 'system'),
+('perple', '2000', 6, 'Intermediate + Advanced', 'Advanced intermediate belt', 'system', 'system'),
+('brown1', '3200', 7, 'Advanced', 'Advanced belt', 'system', 'system'),
+('brown2', '2800', 8, 'Advanced', 'Advanced belt', 'system', 'system'),
+('brown3', '2400', 9, 'Advanced', 'Advanced belt', 'system', 'system'),
+('black', '15000', 10, 'Mastery', 'Expert belt', 'system', 'system'),
+('black dan 1', '20000', 11, 'Mastery', 'Expert belt - 1st Dan', 'system', 'system'),
+('black dan 2', '25000', 12, 'Mastery', 'Expert belt - 2nd Dan', 'system', 'system'),
+('black dan 3', '30000', 13, 'Mastery', 'Expert belt - 3rd Dan', 'system', 'system'),
+('black dan 4', '35000', 14, 'Mastery', 'Expert belt - 4th Dan', 'system', 'system');
 
 -- Insert data into user_class table
 -- Instructor (user_id 2) teaches two classes (class_id 1 and class_id 2) with multiple students enrolled in each.
@@ -47,15 +55,37 @@ INSERT INTO user_class (user_lid, class_lid, belt_lid, created_by, updated_by) V
 (10, 1, 1, 'system', 'system'); -- Student 8 in Karate Basics with White Belt
 
 -- Insert data into user_belt_record table
-INSERT INTO user_belt_record (user_lid, class_lid, belt_lid, exam_date, status, fees, location, created_by, updated_by) VALUES
-(3, 1, 1, '2024-01-01', 'Passed', '1000', 'Dojo A', 'system', 'system'),
-(4, 1, 1, '2024-01-01', 'Passed', '1000', 'Dojo A', 'system', 'system'),
-(5, 1, 1, '2024-01-01', 'Failed', '1000', 'Dojo A', 'system', 'system'),
-(6, 2, 2, '2024-02-01', 'Passed', '1200', 'Dojo B', 'system', 'system'),
-(7, 2, 2, '2024-02-01', 'Passed', '1200', 'Dojo B', 'system', 'system'),
-(8, 2, 2, '2024-02-01', 'Failed', '1200', 'Dojo B', 'system', 'system'),
-(9, 2, 3, '2024-03-01', 'Passed', '1500', 'Dojo C', 'system', 'system'),
-(10, 1, 1, '2024-01-01', 'Passed', '1000', 'Dojo A', 'system', 'system');
+INSERT INTO user_belt_record (
+    user_lid, class_lid, belt_lid, exam_date, status, fees, location, created_by, updated_by
+) VALUES
+-- Rishikesh Dhanraj Kamble
+((SELECT id FROM public.user WHERE phone_no = '7045396413'), NULL, 11, '2022-12-26', 'Passed', '20000', 'Alibaug', 'system', 'system'),
+
+-- Prasad Bhimaji Salunkhe
+((SELECT id FROM public.user WHERE phone_no = '8652578436'), NULL, 13, '2022-04-03', 'Passed', '30000', 'Samaj Hall Kamothe', 'system', 'system'),
+
+-- Vaibhav Anant Kharade
+((SELECT id FROM public.user WHERE phone_no = '9321798545'), NULL, 11, '2023-12-26', 'Passed', '20000', 'Guru Kiran Villa Alibaug', 'system', 'system'),
+
+-- Muktai Sanjay Gaikwad
+((SELECT id FROM public.user WHERE phone_no = '9594205474'), NULL, 11, '2024-08-15', 'Passed', '20000', 'Samaj Hall Kamothe', 'system', 'system'),
+
+-- Roshni Piraji Jogdand
+((SELECT id FROM public.user WHERE phone_no = '7021457277'), NULL, 13, '2022-12-26', 'Passed', '30000', 'Alibaug', 'system', 'system'),
+
+-- Amar Bramhadeo Misal
+((SELECT id FROM public.user WHERE phone_no = '9320912083'), NULL, 12, '2022-04-03', 'Passed', '25000', 'Samaj Hall Kamothe', 'system', 'system'),
+
+-- Tushar Ramesh Borate
+((SELECT id FROM public.user WHERE phone_no = '9222085041'), NULL, 12, '2023-04-16', 'Passed', '25000', 'R2 Karanjade', 'system', 'system'),
+
+-- Yuvraj Ananda Narale
+((SELECT id FROM public.user WHERE phone_no = '7208675262'), NULL, 12, '2023-04-16', 'Passed', '25000', 'SGT Karanjade', 'system', 'system'),
+
+-- Vishal Zende
+((SELECT id FROM public.user WHERE phone_no = '9372036791'), NULL, 14, '2023-05-10', 'Passed', '35000', 'Exam Location', 'system', 'system');
+
+
 
 -- Insert data into fees_type_master table
 INSERT INTO fees_type_master (name, abbr, created_by) VALUES

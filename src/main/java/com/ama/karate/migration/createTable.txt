@@ -10,7 +10,7 @@ CREATE TABLE roles (
 CREATE TABLE user (
     id SERIAL PRIMARY KEY,
     phone_no VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(100) NOT NULL DEFAULT 'ama@123',
+    password VARCHAR(100) NOT NULL DEFAULT '$2a$10$kZ.rgnyhaNSCf0gaK6CE.egqfiyEZoY5cVe0fV/cvzlj5fCODaXYa',
     email VARCHAR(100) NOT NULL UNIQUE,
     full_name VARCHAR(255) NOT NULL,
     parent_name VARCHAR(255) NOT NULL,
@@ -22,7 +22,8 @@ CREATE TABLE user (
     created_by VARCHAR(100) NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_by VARCHAR(100) NOT NULL,
-    active BOOLEAN NOT NULL DEFAULT true
+    active BOOLEAN NOT NULL DEFAULT true,
+    dob VARCHAR(255)
 );
 
 CREATE TABLE user_title (
@@ -52,6 +53,7 @@ CREATE TABLE class_master (
     active BOOLEAN NOT NULL DEFAULT true
 );
 
+DROP TABLE belt_master;
 CREATE TABLE belt_master (
     id SERIAL PRIMARY KEY,
     colour VARCHAR(50) NOT NULL,
@@ -59,6 +61,7 @@ CREATE TABLE belt_master (
     level INT NOT NULL,
     portion TEXT,
     description TEXT,
+    color_code VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by VARCHAR(100) NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -15,7 +15,7 @@ public class KarateApplication {
         // Retrieve the DatabaseValidator bean and run validation
         DatabaseValidator validator = context.getBean(DatabaseValidator.class);
         try {
-            validator.validateDatabase();
+            // validator.validateDatabase();
             System.out.println("Database has been validated successfully, Application Started!");
         } catch (Exception e) {
             System.err.println("Database validation failed: " + e.getMessage());

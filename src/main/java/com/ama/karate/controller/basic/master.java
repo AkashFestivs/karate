@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ama.karate.dto.BeltDto;
@@ -61,18 +61,6 @@ public class Master {
         }
     }
 
-    @PostMapping("/add-classes")
-    public ResponseEntity<String> addClasses(@RequestBody String JsonObj) {
-
-        try {
-            ResponseDto response = mis.insertClasses(JsonObj);
-
-            return ResponseEntity.status(response.getStatusCode()).body(response.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
-        }
-    }
-
     @PostMapping("/add-belts")
     public ResponseEntity<String> addBelts(@RequestBody String JsonObj) {
 
@@ -82,6 +70,18 @@ public class Master {
             return ResponseEntity.status(response.getStatusCode()).body(response.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/class-master")
+    public ResponseEntity<String> classMaster(@RequestBody String classObj, @RequestAttribute String phoneNo) {
+
+        try {
+            ResponseDto response = mis.sendClassMaster(classObj, phoneNo);
+
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Exception", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -36,7 +36,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authenticationProvider(customAuthProvider)
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/authenticate", "/forgot-password", "/change-password").permitAll()
+                .requestMatchers("/authenticate", "/forgot-password", "/change-password","/read-excel").permitAll()
                 .anyRequest().access((authentication, context) -> checkSessionAndHeader(context.getRequest()))
             )
             .sessionManagement(session -> session
@@ -58,7 +58,9 @@ public class SecurityConfig {
             boolean isKeyInRedis = sessionKeyHeader != null && rs.getSession(sessionKeyHeader) != null;
             String SessionData = rs.getSession(sessionKeyHeader);
             String phoneNo = getJsonKey(SessionData, "phoneNo");
+            String userRole = getJsonKey(SessionData, "userRole");
             request.setAttribute("phoneNo", phoneNo);
+            request.setAttribute("userRole", userRole);
             return new AuthorizationDecision(isKeyInRedis);
         }catch(Exception e){
             return new AuthorizationDecision(false);

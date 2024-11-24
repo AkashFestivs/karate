@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ama.karate.dto.ClassesDto;
 import com.ama.karate.dto.StudentDto;
+import com.ama.karate.interfaceService.MasterInterfaceService;
 import com.ama.karate.interfaceService.UserInterfaceService;
 import static com.ama.karate.utils.JsonKeyService.getJsonKeys;
 
@@ -22,25 +23,39 @@ public class Classes {
 
     @Autowired UserInterfaceService iis;
 
+    @Autowired MasterInterfaceService mis;
+
     @PostMapping("/user-classes")
-    public ResponseEntity<String> userClasses(@RequestAttribute String phoneNo) {
+    public ResponseEntity<String> userClasses(@RequestAttribute String phoneNo, @RequestAttribute String userRole) {
 
         try {
-            List<ClassesDto> response = iis.bringUserClasses(phoneNo);
-            System.out.println("Phone number: " + phoneNo);
-            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+
+
+            System.out.println("ROLE : "+userRole);
+            if(userRole.equalsIgnoreCase("Admin")){
+                List<ClassesDto> response = mis.bringClassList();
+                return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+            }else{
+                List<ClassesDto> response = iis.bringUserClasses(phoneNo);
+                return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>("Exception", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/class-studnets")
-    public ResponseEntity<String> classStudnets(@RequestParam int classId, @RequestAttribute String phoneNo) {
+    public ResponseEntity<String> classStudnets(@RequestParam int classId, @RequestAttribute String phoneNo, @RequestAttribute String userRole) {
 
         try {
-            List<StudentDto> response = iis.bringClassStudents(phoneNo, classId);
+            if(userRole.equalsIgnoreCase("Admin")){
+                List<StudentDto> response = mis.bringAllStudents();
+                return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+            }else{
+                List<StudentDto> response = iis.bringClassStudents(phoneNo, classId);
+                return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+            }
 
-            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Exception", HttpStatus.INTERNAL_SERVER_ERROR);
         }
