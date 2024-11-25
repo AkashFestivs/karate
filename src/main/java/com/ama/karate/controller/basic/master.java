@@ -54,9 +54,8 @@ public class Master {
         try {
             List<StudentDto> response = mis.bringAllStudents();
 
-            String jsonResponse = om.writeValueAsString(response);
-            return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
-        } catch (JsonProcessingException e) {
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>("JsonProcessingException", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

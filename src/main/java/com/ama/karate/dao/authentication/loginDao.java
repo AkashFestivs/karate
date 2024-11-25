@@ -49,7 +49,11 @@ public class loginDao {
                                 "     (SELECT COUNT(pu_inner.id) " + 
                                 "      FROM public.user pu_inner" + 
                                 "      INNER JOIN roles rr_inner ON rr_inner.id = pu_inner.role_id" + 
-                                "      WHERE pu_inner.active = TRUE AND rr_inner.abbr = 'STD') AS totalStudents" + 
+                                "      WHERE pu_inner.active = TRUE AND rr_inner.abbr = 'INS') AS totalInstructors," + 
+                                "     (SELECT COUNT(pu_inner.id) " + 
+                                "      FROM public.user pu_inner" + 
+                                "      INNER JOIN roles rr_inner ON rr_inner.id = pu_inner.role_id" + 
+                                "      WHERE pu_inner.active = TRUE AND rr_inner.abbr = 'STD') AS totalStudents" +
                                 " FROM   " + 
                                 "     public.user pu   " + 
                                 " INNER JOIN   " + 
@@ -89,7 +93,8 @@ public class loginDao {
                             " aggregated_data AS (" + 
                             "     SELECT" + 
                             "         COUNT(DISTINCT uc.class_lid) AS total_classes," + 
-                            "         COUNT(CASE WHEN rr.abbr = 'STD' THEN pu.id END) AS totalStudents" + 
+                            "         COUNT(CASE WHEN rr.abbr = 'STD' THEN pu.id END) AS totalStudents," + 
+                            "         COUNT(CASE WHEN rr.abbr = 'INS' THEN pu.id END) AS totalInstructors" + 
                             "     FROM" + 
                             "         user_class uc" + 
                             "     INNER JOIN" + 
@@ -107,7 +112,8 @@ public class loginDao {
                             " SELECT" + 
                             "     ud.*," + 
                             "     ad.total_classes," + 
-                            "     ad.totalStudents " + 
+                            "     ad.totalStudents, " + 
+                            "     ad.totalInstructors " + 
                             " FROM" + 
                             "     user_details ud," + 
                             "     aggregated_data ad;";

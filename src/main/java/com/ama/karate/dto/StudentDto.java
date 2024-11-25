@@ -5,7 +5,9 @@ public class StudentDto {
     private String studentName;
     private String studentBelt;
     private String studentProfileUrl;
-    private String student_lid;
+    private String studentLid;
+    private String className;
+    private String phoneNo;
 
     public String getStudentName() {
         return studentName;
@@ -25,12 +27,31 @@ public class StudentDto {
     public void setStudentProfileUrl(String studentProfileUrl) {
         this.studentProfileUrl = studentProfileUrl;
     }
-    public String getStudent_lid() {
-        return student_lid;
+
+    public String getStudentLid() {
+        return studentLid;
     }
-    public void setStudent_lid(String student_lid) {
-        this.student_lid = student_lid;
+
+    public void setStudentLid(String studentLid) {
+        this.studentLid = studentLid;
     }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
     
     @Override
     public String toString() {
@@ -38,12 +59,11 @@ public class StudentDto {
                 "\"studentName\":\"" + studentName + "\"," +
                 "\"studentBelt\":\"" + studentBelt + "\"," +
                 "\"studentProfileUrl\":\"" + studentProfileUrl + "\"," +
-                "\"student_lid\":" + student_lid +
+                "\"className\":\"" + className + "\"," +
+                "\"phoneNo\":\"" + phoneNo + "\"," +
+                "\"studentLid\":" + studentLid +
                 "}";
     }
-
-    
-
     
     
 }

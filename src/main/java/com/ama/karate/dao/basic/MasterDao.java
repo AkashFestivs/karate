@@ -1,7 +1,6 @@
 package com.ama.karate.dao.basic;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,9 +56,16 @@ public class MasterDao implements MasterInterfaceService{
     @Override
     public List<StudentDto> bringAllStudents() {
         try {
-            String SQL = "";
+            String SQL = "SELECT DISTINCT pu.id AS student_lid, pu.full_name AS studentName, bm.colour AS studentBelt, pu.profile_url AS studentProfileUrl, " + 
+                            " cm.name AS className, pu.phone_no AS phoneNo " + 
+                            " FROM public.user pu " + 
+                            " INNER JOIN user_class uc ON pu.id = uc.user_lid " + 
+                            " INNER JOIN roles rr ON rr.id = pu.role_id " + 
+                            " INNER JOIN class_master cm ON uc.class_lid = cm.id " + 
+                            " INNER JOIN belt_master bm ON bm.id = uc.belt_lid " + 
+                            " WHERE rr.abbr = 'STD';";
 
-            return jt.queryForList(SQL, StudentDto.class);
+            return jt.query(SQL, new BeanPropertyRowMapper<>(StudentDto.class));
         } catch (DataAccessException e) {
             return new ArrayList<StudentDto>();
         }

@@ -14,13 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ama.karate.dto.ResponseDto;
 import com.ama.karate.dto.StudentDto;
 import com.ama.karate.interfaceService.UserInterfaceService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import jakarta.servlet.http.HttpSession;
 
 @RestController
-public class Students {
+public class karateUser {
 
     @Autowired UserInterfaceService iis;
     

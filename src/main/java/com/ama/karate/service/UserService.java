@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ama.karate.dao.userBasic.ClassesDao;
-import com.ama.karate.dao.userBasic.StudentsDao;
+import com.ama.karate.dao.userBasic.karateUserDao;
 import com.ama.karate.dto.ClassesDto;
 import com.ama.karate.dto.ResponseDto;
 import com.ama.karate.dto.StudentDto;
@@ -17,7 +17,7 @@ public class UserService implements UserInterfaceService{
 
     @Autowired ClassesDao icd;
     
-    @Autowired StudentsDao isd;
+    @Autowired karateUserDao isd;
 
     @Override
     public List<ClassesDto> bringUserClasses(String phoneNo) {

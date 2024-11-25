@@ -14,6 +14,7 @@ public class SessionDto {
     private String address;
     private Integer totalClasses;
     private Integer totalStudents;
+    private Integer totalInstructors;
 
     public Long getUserLid() {
         return userLid;
@@ -82,6 +83,14 @@ public class SessionDto {
         this.totalStudents = totalStudents;
     }
 
+    public Integer getTotalInstructors() {
+        return totalInstructors;
+    }
+
+    public void setTotalInstructors(Integer totalInstructors) {
+        this.totalInstructors = totalInstructors;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -97,9 +106,12 @@ public class SessionDto {
         sb.append(", \"address\":\"").append(address).append("\"");
         sb.append(", \"totalClasses\":").append(totalClasses);
         sb.append(", \"totalStudents\":").append(totalStudents);
+        sb.append(", \"totalInstructors\":").append(totalInstructors);
         sb.append("}");
         return sb.toString();
     }
+
+
 
     
 

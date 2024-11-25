@@ -12,7 +12,7 @@ import com.ama.karate.dto.ResponseDto;
 import com.ama.karate.dto.StudentDto;
 
 @Service
-public class StudentsDao{
+public class karateUserDao{
 
     @Autowired
     JdbcTemplate jt;
